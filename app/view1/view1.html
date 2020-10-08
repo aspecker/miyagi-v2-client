@@ -1,22 +1,35 @@
-<div ng-init="loadPeople()">
+<div ng-init="loadData()">
     <md-button class="action-button" ng-click="showDialog($event)">Add New User</md-button>
-
-    <table ng-hide="people.length <= 0">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Date of Birth</th>
-            <th>Address</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="p in people track by p.id">
-            <td>{{p.firstName}} {{p.lastName}}</td>
-            <td format-date>{{p.dateOfBirth}}</td>
-            <td>{{p.address}}</td>
-        </tr>
-        </tbody>
-    </table>
+    <div ng-hide="people.length <= 0">
+        <table>
+            <thead>
+            <tr>
+                <th ng-repeat="month in months">{{month}}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-repeat="(index, count) in monthCount track by 'i' + index.toString() + count.toString()">{{count}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date of Birth</th>
+                <th>Address</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="p in people track by p.id">
+                <td>{{p.firstName}} {{p.lastName}}</td>
+                <td>{{p.dateOfBirth | date : "MMM d, yyyy"}}</td>
+                <td>{{p.address}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div ng-hide="people.length > 0">
         Sorry, no people found. Please try again.
     </div>

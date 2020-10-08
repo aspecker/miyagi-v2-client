@@ -47,3 +47,11 @@ md-dialog {
   display: flex;
   flex-direction: column;
 }
+
+md-dialog-content > div {
+  padding: 10px;
+}
+
+md-dialog-content {
+  padding: 20px;
+}
