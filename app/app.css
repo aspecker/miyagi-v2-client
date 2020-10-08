@@ -28,3 +28,22 @@
   color: #ffffff;
   background-color: darkcyan;
 }
+
+
+table {
+  width: 100%;
+}
+th {
+    text-align: center;
+}
+td {
+    text-align: center;
+    padding: 10px;
+}
+
+md-dialog {
+  width: 60%;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+}
