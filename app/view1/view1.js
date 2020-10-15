@@ -32,10 +32,22 @@ angular.module('myApp.view1', ['ngRoute'])
             return $http.get(apiURL + 'person/count');
         }
 
+        function filter(data) {
+            return $http({
+                url: apiURL + 'person/filter',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                data: jQuery.param(data)
+            });
+        }
+
         return {
             list: list,
             save: save,
-            countMonths: countMonths
+            countMonths: countMonths,
+            filter: filter
         };
     })
 
@@ -43,6 +55,12 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.people = [];
         $scope.months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         $scope.monthCount = [];
+        $scope.filterFields = {
+            firstName: '',
+            lastName: '',
+            startDate: '',
+            endDate: ''
+        };
         // requests person data from API
         $scope.loadData = function () {
             apiService.list().then(function (response) {
@@ -54,9 +72,28 @@ angular.module('myApp.view1', ['ngRoute'])
             });
         };
 
+        $scope.filterPeople = function() {
+            Object.keys($scope.filterFields).forEach(function(key) {
+                if (!$scope.filterFields[key]) {
+                    delete $scope.filterFields[key];
+                } else if (key.toLowerCase().includes('date')) {
+                    $scope.filterFields[key] = new Date($scope.filterFields[key]).toISOString();
+                }
+            });
+            console.log($scope.filterFields);
+            apiService.filter($scope.filterFields).then(function(response) {
+                console.log(response);
+            });
+        };
 
+        $scope.clearFilters = function() {
+            Object.keys($scope.filterFields).forEach(function(key) {
+                $scope.filterFields[key] = '';
+            });
+        };
+
+        // displays the material dialog
         $scope.showDialog = function (ev) {
-
             // show the dialog
             $mdDialog.show({
                 templateUrl: 'view1/addPersonDialog.tmpl.html',
@@ -73,6 +110,8 @@ angular.module('myApp.view1', ['ngRoute'])
             });
         };
 
+        // controller responsible for the add person logic
+        // contained in the md-dialog
         function DialogController($scope, $mdDialog, apiService) {
             var emptyPersonObject = {
                 firstName: '',
@@ -86,7 +125,6 @@ angular.module('myApp.view1', ['ngRoute'])
             };
 
             $scope.cancel = function () {
-                $scope.personToAdd = emptyPersonObject;
                 $mdDialog.cancel();
             };
 

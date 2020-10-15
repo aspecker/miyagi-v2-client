@@ -1,5 +1,28 @@
-<div ng-init="loadData()">
-    <md-button class="action-button" ng-click="showDialog($event)">Add New User</md-button>
+<div class="container" ng-init="loadData()">
+    <div>
+        <md-button class="action-button" ng-click="showDialog($event)">Add New User</md-button>
+        <div class="filters">
+            <h4>Filters</h4>
+            <md-input-container>
+                <label for="firstName">First Name</label>
+                <input ng-model="filterFields.firstName" id="firstName" type="text">
+            </md-input-container>
+            <md-input-container>
+                <label for="lastName">Last Name</label>
+                <input ng-model="filterFields.lastName" id="lastName" type="text">
+            </md-input-container>
+            <md-input-container>
+                <label for="startDate">Start Date</label>
+                <md-datepicker ng-model="filterFields.startDate" id="startDate" type="text"></md-datepicker>
+            </md-input-container>
+            <md-input-container>
+                <label for="endDate">End Date</label>
+                <md-datepicker ng-model="filterFields.endDate" id="endDate" type="text"></md-datepicker>
+            </md-input-container>
+            <md-button class="action-button" ng-click="filterPeople()">Submit</md-button>
+            <md-button ng-click="clearFilters()">Clear</md-button>
+        </div>
+    </div>
     <div ng-hide="people.length <= 0">
         <table class="display-table">
             <thead>
@@ -9,7 +32,9 @@
             </thead>
             <tbody>
             <tr>
-                <td class="table-cell" ng-repeat="(index, count) in monthCount track by 'i' + index.toString() + count.toString()">{{count}}</td>
+                <td class="table-cell"
+                    ng-repeat="(index, count) in monthCount track by 'i' + index.toString() + count.toString()">{{count}}
+                </td>
             </tr>
             </tbody>
         </table>
@@ -24,7 +49,7 @@
             <tbody>
             <tr ng-repeat="p in people track by p.id">
                 <td class="table-cell">{{p.firstName}} {{p.lastName}}</td>
-                <td class="table-cell">{{p.dateOfBirth | date : "MMM d, yyyy"}}</td>
+                <td class="table-cell">{{p.dateOfBirth | date: "MMM d, yyyy"}}</td>
                 <td class="table-cell">{{p.address}}</td>
             </tr>
             </tbody>
