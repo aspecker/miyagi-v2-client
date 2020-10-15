@@ -63,33 +63,44 @@ angular.module('myApp.view1', ['ngRoute'])
         };
         // requests person data from API
         $scope.loadData = function () {
+            $scope.loadFullList();
+            $scope.countMonths();
+        };
+
+        $scope.loadFullList = function () {
             apiService.list().then(function (response) {
                 $scope.people = response.data;
             });
+        };
 
+        $scope.countMonths = function () {
             apiService.countMonths().then(function (response) {
                 $scope.monthCount = response.data;
             });
         };
 
-        $scope.filterPeople = function() {
-            Object.keys($scope.filterFields).forEach(function(key) {
+        $scope.filterPeople = function () {
+            Object.keys($scope.filterFields).forEach(function (key) {
                 if (!$scope.filterFields[key]) {
                     delete $scope.filterFields[key];
                 } else if (key.toLowerCase().includes('date')) {
                     $scope.filterFields[key] = new Date($scope.filterFields[key]).toISOString();
                 }
             });
-            console.log($scope.filterFields);
-            apiService.filter($scope.filterFields).then(function(response) {
-                console.log(response);
+            apiService.filter($scope.filterFields).then(function (response) {
+                $scope.people = response.data;
             });
         };
 
-        $scope.clearFilters = function() {
-            Object.keys($scope.filterFields).forEach(function(key) {
+        $scope.clearFilters = function () {
+            Object.keys($scope.filterFields).forEach(function (key) {
                 $scope.filterFields[key] = '';
             });
+        };
+
+        $scope.resetFilters = function () {
+            $scope.clearFilters();
+            $scope.loadFullList();
         };
 
         // displays the material dialog
@@ -130,10 +141,8 @@ angular.module('myApp.view1', ['ngRoute'])
 
             $scope.submit = function () {
                 $scope.personToAdd.dateOfBirth = new Date($scope.personToAdd.dateOfBirth).toISOString();
-                console.log('passing in date of birth' + $scope.personToAdd.dateOfBirth);
                 apiService.save($scope.personToAdd)
                     .then(function (result) {
-                        // console.log(result)
                         $mdDialog.hide(true);
                     }).catch(function (err) {
                     // console.log(err);
