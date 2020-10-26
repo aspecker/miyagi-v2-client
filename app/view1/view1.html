@@ -48,11 +48,11 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="p in people">
+            <tr ng-repeat="p in people" ng-click="showMap($event, p)">
                 <td class="table-cell">{{p.firstName}} {{p.lastName}}</td>
                 <td class="table-cell">{{p.dateOfBirth | date: "MMM d, yyyy"}}</td>
                 <td class="table-cell">{{p.address}}</td>
-                <td ng-click="calculateDistance(p.address)" class="table-cell">
+                <td ng-click="calculateDistance(p.address, $event)" class="table-cell">
                     <md-button class="action-button">Calculate Distance</md-button>
                 </td>
             </tr>
