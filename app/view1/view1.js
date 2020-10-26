@@ -43,11 +43,23 @@ angular.module('myApp.view1', ['ngRoute'])
             });
         }
 
+        function calculateDistance(data) {
+            return $http({
+                url: apiURL + 'person/calculateDistance',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                data: jQuery.param(data)
+            });
+        }
+
         return {
             list: list,
             save: save,
             countMonths: countMonths,
-            filter: filter
+            filter: filter,
+            calculateDistance: calculateDistance
         };
     })
 
@@ -61,6 +73,7 @@ angular.module('myApp.view1', ['ngRoute'])
             startDate: '',
             endDate: ''
         };
+
         // requests person data from API
         $scope.loadData = function () {
             $scope.loadFullList();
@@ -101,6 +114,13 @@ angular.module('myApp.view1', ['ngRoute'])
         $scope.resetFilters = function () {
             $scope.clearFilters();
             $scope.loadFullList();
+        };
+
+        $scope.calculateDistance = function (address) {
+            apiService.calculateDistance({address: address})
+                .then(function(response) {
+                    alert(response.data);
+            });
         };
 
         // displays the material dialog

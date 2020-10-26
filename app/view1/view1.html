@@ -39,7 +39,7 @@
             </tr>
             </tbody>
         </table>
-        <table>
+        <table class="results-table">
             <thead>
             <tr>
                 <th>Name</th>
@@ -48,10 +48,13 @@
             </tr>
             </thead>
             <tbody>
-            <tr ng-repeat="p in people track by p.id">
+            <tr ng-repeat="p in people">
                 <td class="table-cell">{{p.firstName}} {{p.lastName}}</td>
                 <td class="table-cell">{{p.dateOfBirth | date: "MMM d, yyyy"}}</td>
                 <td class="table-cell">{{p.address}}</td>
+                <td ng-click="calculateDistance(p.address)" class="table-cell">
+                    <md-button class="action-button">Calculate Distance</md-button>
+                </td>
             </tr>
             </tbody>
         </table>

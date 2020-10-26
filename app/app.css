@@ -61,4 +61,7 @@ md-dialog-content {
     padding: 20px;
 }
 
+.results-table {
+    border: 1px solid darkcyan;
+}
 
