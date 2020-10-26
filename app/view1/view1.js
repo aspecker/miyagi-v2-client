@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('myApp.view1', ['ngRoute'])
+angular.module('myApp.view1', ['ngRoute', 'ngMaterial'])
 
     .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/view1', {
@@ -92,6 +92,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 endDate: ''
             };
             $scope.panelRef = null;
+            $scope.mappedPerson = null;
 
             // requests person data from API
             $scope.loadData = function () {
@@ -178,7 +179,7 @@ angular.module('myApp.view1', ['ngRoute'])
 
                 var config = {
                     attachTo: angular.element(document.body),
-                    controller: mapDialogController(),
+                    controller: mapDialogController,
                     controllerAs: 'ctrl',
                     position: panelPosition,
                     animation: panelAnimation,
@@ -212,11 +213,12 @@ angular.module('myApp.view1', ['ngRoute'])
                 });
             };
 
-            function mapDialogController(MdPanelRef, dataToPass) {
-                var person = dataToPass;
-
+            function mapDialogController($mdPanel, $scope, dataToPass) {
+                $scope.mappedPerson = dataToPass;
                 function closeDialog() {
-                    MdPanelRef.close();
+                    if ($mdPanel) {
+                        $mdPanel.close();
+                    }
                 }
             }
 
