@@ -53,12 +53,25 @@ angular.module('myApp.view1', ['ngRoute'])
             });
         }
 
+        function getLatLong(data) {
+            console.log(data)
+            return $http({
+                url: apiURL + 'person/getLatLong',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                data: jQuery.param(data)
+            });
+        }
+
         return {
             list: list,
             save: save,
             countMonths: countMonths,
             filter: filter,
-            calculateDistance: calculateDistance
+            calculateDistance: calculateDistance,
+            getLatLong: getLatLong
         };
     })
 
@@ -148,7 +161,7 @@ angular.module('myApp.view1', ['ngRoute'])
                 });
             };
 
-            $scope.showMap = function($event, person) {
+            $scope.showMap = function ($event, person) {
                 var panelPosition = $mdPanel.newPanelPosition()
                     .relativeTo($event.target)
                     .addPanelPosition(
@@ -175,33 +188,33 @@ angular.module('myApp.view1', ['ngRoute'])
                     escapeToClose: true,
                     focusOnOpen: true,
                     locals: {dataToPass: person}
-                }
-
-                $mdPanel.open(config)
-                    .then(function(result) {
-                        console.log(result)
-                        $scope.panelRef = result;
-                        $scope.initMap()
+                };
+                apiService.getLatLong({address: person.address})
+                    .then(function (response) {
+                        $mdPanel.open(config)
+                            .then(function (result) {
+                                $scope.panelRef = result;
+                                $scope.initMap(response.data.lat, response.data.lng);
+                            });
                     });
             };
 
-            $scope.initMap = function() {
-                // The location of Uluru
-                const uluru = { lat: -25.344, lng: 131.036 };
-                // The map, centered at Uluru
-                const map = new google.maps.Map(document.getElementById("map"), {
-                    zoom: 4,
-                    center: uluru,
+            $scope.initMap = function (lat, lng) {
+                var coords = {lat: lat, lng: lng};
+                var map = new google.maps.Map(document.getElementById("map"), {
+                    zoom: 12,
+                    center: coords,
                 });
                 // The marker, positioned at Uluru
-                const marker = new google.maps.Marker({
-                    position: uluru,
+                var marker = new google.maps.Marker({
+                    position: coords,
                     map: map,
                 });
-            }
+            };
 
             function mapDialogController(MdPanelRef, dataToPass) {
-                var person = dataToPass
+                var person = dataToPass;
+
                 function closeDialog() {
                     MdPanelRef.close();
                 }
